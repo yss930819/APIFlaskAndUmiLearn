@@ -1,0 +1,4 @@
+@echo off
+echo Æô¶¯ÐéÄâ»·¾³
+call .\venv\Scripts\activate.bat 
+cmd /k

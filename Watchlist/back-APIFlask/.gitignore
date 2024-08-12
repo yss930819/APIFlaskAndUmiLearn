@@ -1,0 +1,11 @@
+/.idea/
+/venv
+/wheelhouse
+_data
+_log
+_out
+/build
+*.pyc
+translation_py_to_q.ts
+*.qm
+/instance
