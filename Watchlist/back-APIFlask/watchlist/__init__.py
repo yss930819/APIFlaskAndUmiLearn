@@ -3,6 +3,7 @@ from apiflask import APIFlask, HTTPError
 
 from watchlist.api.hello import hello_bp
 from watchlist.extensions import response_handler
+from watchlist.extensions.db import init_db_cmd
 
 
 def create_app(cfg: dict = None):
@@ -43,4 +44,4 @@ def register_commands(app):
     :param app: Flask 的应用实例
     :return:
     """
-    pass
+    app.cli.add_command(init_db_cmd)
