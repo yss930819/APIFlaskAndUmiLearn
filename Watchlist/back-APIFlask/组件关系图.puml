@@ -1,0 +1,30 @@
+@startuml
+
+component app
+component watchlist
+
+component api.hello
+
+component extensions {
+    component extensions.db
+    component extensions.response
+}
+
+component dao {
+    component dao.user
+    component dao.movie
+}
+
+app --> watchlist : 创建 app
+
+watchlist --> extensions : 注册
+
+watchlist --> api.hello: 注册
+api.hello --> extensions.response: 调用工具
+
+watchlist --> dao : 注册
+dao.user --> extensions.db
+dao.movie --> extensions.db
+
+
+@enduml

@@ -1,6 +1,7 @@
 """
-项目模型
-
-- 输入输出模型
-- 数据库模型
+项目数据库操作
 """
+from .movie import Movie
+from .user import User
+
+__all__ = ['Movie', 'User']

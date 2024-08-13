@@ -1,14 +1,18 @@
+import os
+from pathlib import Path
+
 import pydash
 from apiflask import APIFlask, HTTPError
 
 from watchlist.api.hello import hello_bp
-from watchlist.extensions import response_handler
-from watchlist.extensions.db import init_db_cmd
+from watchlist.extensions import response_handler, init_all_db_cmd, db
+import watchlist.dao as dao
 
 
 def create_app(cfg: dict = None):
     app = APIFlask(__name__, title="Watchlist API", version="1.0.0")
 
+    init_default_config(app)
     if not pydash.is_none(cfg):
         app.config.from_object(cfg)
 
@@ -17,6 +21,22 @@ def create_app(cfg: dict = None):
     register_blueprints(app)
 
     return app
+
+
+def init_default_config(app: APIFlask):
+    """
+    请在此添加应用的默认配置
+    """
+    _root = Path(app.root_path)
+
+    # 数据库配置
+    _db_path = (_root / "_data/data.db")
+    # 创建数据库文件夹
+    if not _db_path.parent.exists():
+        _db_path.parent.mkdir(parents=True, exist_ok=True)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + _db_path.__str__()
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_ECHO"] = True
 
 
 def register_blueprints(app: APIFlask):
@@ -36,6 +56,7 @@ def register_extensions(app):
     :return:
     """
     response_handler.init_app(app)
+    db.init_app(app)
 
 
 def register_commands(app):
@@ -44,4 +65,4 @@ def register_commands(app):
     :param app: Flask 的应用实例
     :return:
     """
-    app.cli.add_command(init_db_cmd)
+    init_all_db_cmd(app)
