@@ -13,21 +13,29 @@ class BaseResponse:
     code: int = field(
         default=0,
         metadata={
-            "title": "状态码",
-            "description": "0 成功，非 0 失败",
+            "metadata":{
+                "title": "状态码",
+                "description": "0 成功，非 0 失败",
+            }
+
         }
     )
     data: Union[dict, list] = field(
         default_factory=dict,
         metadata={
-            "title": "返回数据",
-            "description": "成功时返回数据，失败时返回为故障详情",
+            "metadata":{
+                "title": "返回数据",
+                "description": "成功时返回数据，失败时返回为故障详情",
+            }
+
         })
     message: str = field(
         default="",
         metadata={
-            "title": "返回消息",
-            "description": "错误时返回错误提示消息",
+            "metadata":{
+                "title": "返回消息",
+                "description": "错误时返回错误提示消息",
+            }
         })
 
 

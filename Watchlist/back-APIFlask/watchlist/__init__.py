@@ -4,6 +4,7 @@ from pathlib import Path
 import pydash
 from apiflask import APIFlask, HTTPError
 
+from watchlist.api import blueprints
 from watchlist.api.hello import hello_bp
 from watchlist.cmd import init_all_db_cmd
 from watchlist.extensions import response_handler, db
@@ -47,7 +48,8 @@ def register_blueprints(app: APIFlask):
     :return:
     """
     PREFIX_V0 = "/api/v0"
-    app.register_blueprint(hello_bp, url_prefix=PREFIX_V0 + "/hello")
+    for bp in blueprints:
+        app.register_blueprint(bp, url_prefix=PREFIX_V0 + "/" + bp.name)
 
 
 def register_extensions(app):

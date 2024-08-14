@@ -15,7 +15,7 @@ class HelloRequest:
         default="Name",
         metadata={
             "title": "名称",
-            "description": "返回消息显示的信息",
+            "description": "返回消息会使用此名称",
             "required": True,
             "validate": Length(min=1, max=10),
         }
