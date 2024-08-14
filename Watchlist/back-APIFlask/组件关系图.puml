@@ -4,7 +4,11 @@ component app
 component watchlist
 component cmd
 
-component api.hello
+component api {
+    component api.hello
+    component api.movie
+    component api.user
+}
 
 component extensions {
     component extensions.db
@@ -20,16 +24,18 @@ app --> watchlist : 创建 app
 
 
 watchlist --> cmd : 注册
-cmd --> extensions.db : 调用
+cmd --> extensions : 调用
 
 watchlist --> extensions : 注册
 
-watchlist --> api.hello: 注册
-api.hello --> extensions.response: 调用工具
+watchlist --> api: 注册
+api.hello --> extensions: 调用工具
+api.user --> extensions: 调用工具
+api.movie --> extensions: 调用工具
 
 watchlist --> dao : 注册
-dao.user --> extensions.db
-dao.movie --> extensions.db
+dao.user --> extensions
+dao.movie --> extensions
 
 
 @enduml

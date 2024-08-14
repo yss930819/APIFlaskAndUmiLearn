@@ -16,7 +16,7 @@ def create_app(cfg: dict = None):
 
     init_default_config(app)
     if not pydash.is_none(cfg):
-        app.config.from_object(cfg)
+        app.config.update(**cfg)
 
     register_extensions(app)
     register_commands(app)
@@ -31,9 +31,9 @@ def init_default_config(app: APIFlask):
     """
     _root = Path(app.root_path)
 
-    # 数据库配置
+    # # 数据库配置
     _db_path = (_root / "_data/data.db")
-    # 创建数据库文件夹
+    # # 创建数据库文件夹
     if not _db_path.parent.exists():
         _db_path.parent.mkdir(parents=True, exist_ok=True)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + _db_path.__str__()

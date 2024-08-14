@@ -10,7 +10,7 @@ class UserDaoTestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.app = create_app({
             "TESTING": True,
-            "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"
+            "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
         })
         cls.dao = UserDao()
 
