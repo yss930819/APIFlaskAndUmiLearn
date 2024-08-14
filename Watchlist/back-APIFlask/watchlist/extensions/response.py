@@ -1,3 +1,5 @@
+import dataclasses
+
 import pydash
 from apiflask import APIFlask, abort
 
@@ -7,13 +9,12 @@ from typing import Union
 from marshmallow_dataclass import dataclass
 
 
-
 @dataclass
 class BaseResponse:
     code: int = field(
         default=0,
         metadata={
-            "metadata":{
+            "metadata": {
                 "title": "状态码",
                 "description": "0 成功，非 0 失败",
             }
@@ -23,7 +24,7 @@ class BaseResponse:
     data: Union[dict, list] = field(
         default_factory=dict,
         metadata={
-            "metadata":{
+            "metadata": {
                 "title": "返回数据",
                 "description": "成功时返回数据，失败时返回为故障详情",
             }
@@ -32,11 +33,19 @@ class BaseResponse:
     message: str = field(
         default="",
         metadata={
-            "metadata":{
+            "metadata": {
                 "title": "返回消息",
                 "description": "错误时返回错误提示消息",
             }
         })
+
+
+@dataclasses.dataclass
+class ErrorData:
+    code: int = -1
+    message: str = ""
+    status_code: int = 400
+    detail: Union[None, dict] = None
 
 
 class ResponseHandler:
@@ -72,7 +81,7 @@ class ResponseHandler:
         res = BaseResponse()
         res.code = -1
 
-        if not pydash.is_nan(error.extra_data) and "code" in error.extra_data:
+        if not pydash.is_none(error.extra_data) and "code" in error.extra_data:
             res.code = error.extra_data["code"]
 
         res.message = error.message
