@@ -2,6 +2,7 @@
 
 component app
 component watchlist
+component cmd
 
 component api.hello
 
@@ -16,6 +17,10 @@ component dao {
 }
 
 app --> watchlist : 创建 app
+
+
+watchlist --> cmd : 注册
+cmd --> extensions.db : 调用
 
 watchlist --> extensions : 注册
 

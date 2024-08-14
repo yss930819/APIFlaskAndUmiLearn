@@ -5,7 +5,8 @@ import pydash
 from apiflask import APIFlask, HTTPError
 
 from watchlist.api.hello import hello_bp
-from watchlist.extensions import response_handler, init_all_db_cmd, db
+from watchlist.cmd import init_all_db_cmd
+from watchlist.extensions import response_handler, db
 import watchlist.dao as dao
 
 
