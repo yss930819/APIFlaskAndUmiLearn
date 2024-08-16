@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.tw-nav-link-button.ant-btn-link {
+    @apply tw-text-white;
+    @apply tw-text-base;
+}
+
+.tw-footer-link-button{
+    @apply tw-p-0;
+    @apply tw-text-xs;
+}
