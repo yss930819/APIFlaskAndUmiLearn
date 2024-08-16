@@ -88,7 +88,21 @@ class UserApiTestCase(unittest.TestCase):
         self.assertEqual(data.data.id, 11)
         self.assertEqual(data.data.name, "Test3")
 
-        #
+        # 异常 name 为空
+        res = self.client.post(self.base_url, json={"name": ""})
+        self.assertEqual(res.status_code, 422)
+
+        data = from_dict(BaseResponse, res.get_json())
+        self.assertEqual(data.code, -1)
+        self.assertEqual(data.message, "Validation error")
+
+        # 异常长度超出限制
+        res = self.client.post(self.base_url, json={"name": "12345678901234567890"})
+        self.assertEqual(res.status_code, 422)
+
+        data = from_dict(BaseResponse, res.get_json())
+        self.assertEqual(data.code, -1)
+        self.assertEqual(data.message, "Validation error")
 
     def test_delete(self):
         res = self.client.delete(self.base_url + "/1")
