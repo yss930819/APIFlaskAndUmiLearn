@@ -65,7 +65,7 @@ movie_bp = APIBlueprint("movie", __name__)
 ERROR_NOT_FOUND = ErrorData(code=-1000, message="电影不存在", status_code=404)
 
 
-@movie_bp.get("/")
+@movie_bp.get("")
 @movie_bp.output(MovieResponse.Schema(many=True))
 def get_movies():
     movies = MovieDao.get_all()

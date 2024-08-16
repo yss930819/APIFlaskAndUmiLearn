@@ -50,7 +50,7 @@ user_bp = APIBlueprint("user", __name__)
 ERROR_NOT_FOUND = ErrorData(code=-1000, message="用户不存在！", status_code=404)
 
 
-@user_bp.get("/")
+@user_bp.get("")
 @user_bp.output(UserResponse.Schema(many=True))
 def get_users():
     users = UserDao.get_all()
@@ -66,7 +66,7 @@ def get_user(_id: int):
     return ResponseHandler.ok_response(user)
 
 
-@user_bp.post("/")
+@user_bp.post("")
 @user_bp.input(UserRequest.Schema())
 @user_bp.output(UserResponse.Schema())
 def create_user(json_data: UserRequest):

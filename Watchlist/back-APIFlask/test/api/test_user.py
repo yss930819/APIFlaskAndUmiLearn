@@ -16,7 +16,7 @@ class UserApiTestCase(unittest.TestCase):
             "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"
         })
         cls.client = cls.app.test_client()
-        cls.base_url = "api/v0/user/"
+        cls.base_url = "api/v0/user"
 
     def setUp(self):
         with self.app.app_context():
@@ -57,7 +57,7 @@ class UserApiTestCase(unittest.TestCase):
 
     def test_get_user(self):
         # 获取存在的用户
-        res = self.client.get(self.base_url + "1")
+        res = self.client.get(self.base_url + "/1")
         self.assertEqual(res.status_code, 200)
 
         data = from_dict(BaseResponse, res.get_json())
@@ -68,7 +68,7 @@ class UserApiTestCase(unittest.TestCase):
         self.assertEqual(data.data.name, "Test1")
 
         # 获取不存在的用户
-        res = self.client.get(self.base_url + "100")
+        res = self.client.get(self.base_url + "/100")
         self.assertEqual(res.status_code, 404)
 
         data = from_dict(BaseResponse, res.get_json())
@@ -91,7 +91,7 @@ class UserApiTestCase(unittest.TestCase):
         #
 
     def test_delete(self):
-        res = self.client.delete(self.base_url + "1")
+        res = self.client.delete(self.base_url + "/1")
         self.assertEqual(res.status_code, 200)
         data = from_dict(BaseResponse, res.get_json())
 
