@@ -7,7 +7,20 @@
     @apply tw-text-base;
 }
 
-.tw-footer-link-button{
+.tw-footer-link-button {
     @apply tw-p-0;
     @apply tw-text-xs;
+}
+
+.tw-item-imdb-button {
+    @apply tw-border-0;
+    @apply tw-bg-yellow-400;
+}
+
+.tw-item-imdb-button:hover {
+    @apply !tw-bg-yellow-500;
+}
+
+.tw-item-imdb-button:active {
+    @apply !tw-bg-yellow-300;
 }
