@@ -6,6 +6,7 @@ from typing import List
 
 from apiflask import APIBlueprint
 
+from .auth import auth_bp
 from .hello import hello_bp
 from .movie import movie_bp
 from .user import user_bp
@@ -14,4 +15,5 @@ blueprints: List[APIBlueprint] = [
     hello_bp,
     user_bp,
     movie_bp,
+    auth_bp
 ]

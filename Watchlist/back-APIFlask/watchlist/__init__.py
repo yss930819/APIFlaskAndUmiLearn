@@ -7,7 +7,7 @@ from apiflask import APIFlask, HTTPError
 from watchlist.api import blueprints
 from watchlist.api.hello import hello_bp
 from watchlist.cmd import init_all_db_cmd
-from watchlist.extensions import response_handler, db, cors
+from watchlist.extensions import response_handler, db, cors, jwt, auth
 import watchlist.dao as dao
 
 
@@ -40,6 +40,9 @@ def init_default_config(app: APIFlask):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = True
 
+    # JWT 配置
+    app.config["JWT_SECRET_KEY"] = "secret"
+
 
 def register_blueprints(app: APIFlask):
     """
@@ -61,6 +64,7 @@ def register_extensions(app):
     response_handler.init_app(app)
     db.init_app(app)
     cors.init_app(app)
+    jwt.init_app(app)
 
 
 def register_commands(app):

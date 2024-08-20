@@ -1,7 +1,8 @@
 import click
 from apiflask import APIFlask
+from sqlalchemy.util import md5_hex
 
-from watchlist.dao import User, Movie
+from watchlist.dao import User, Movie, UserDao
 from watchlist.extensions import db
 
 
@@ -63,7 +64,27 @@ def init_data_cmd():
     click.echo("Insert Data Success")
 
 
+def add_user(name, username, password):
+    password = md5_hex(password + username)
+    print(password)
+    UserDao.create(name, username, password)
+
+
+@click.command('add_user')
+@click.option('-n', '--name', required=True, help='The name of the user.')
+@click.option('-u', '--username', required=True, help='The username of the user.')
+@click.option('-p', '--password', required=True, help='The password of the user.')
+def add_user_cmd(name, username, password):
+    try:
+        add_user(name, username, password)
+    except Exception as e:
+        click.echo(f"Add User Failed: {e}")
+    else:
+        click.echo(f"Add User Success: {name} {username}")
+
+
 def init_all_db_cmd(app: APIFlask):
     app.cli.add_command(init_db_cmd)
     app.cli.add_command(drop_db_cmd)
     app.cli.add_command(init_data_cmd)
+    app.cli.add_command(add_user_cmd)

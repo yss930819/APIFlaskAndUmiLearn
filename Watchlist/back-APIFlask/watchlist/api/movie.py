@@ -2,11 +2,12 @@ from dataclasses import field
 
 import pydash
 from apiflask import APIBlueprint
+from flask_jwt_extended import jwt_required
 from marshmallow.validate import Length
 from marshmallow_dataclass import dataclass
 
 from watchlist.dao import MovieDao
-from watchlist.extensions import ResponseHandler, ErrorData
+from watchlist.extensions import ResponseHandler, ErrorData, auth
 
 
 @dataclass
@@ -74,6 +75,8 @@ def get_movies():
 
 @movie_bp.get("/<int:_id>")
 @movie_bp.output(MovieResponse.Schema())
+@jwt_required()
+@movie_bp.auth_required(auth)
 def get_movie(_id: int):
     movie = MovieDao.get_by_id(_id)
     if pydash.is_none(movie):
@@ -84,13 +87,17 @@ def get_movie(_id: int):
 @movie_bp.post("")
 @movie_bp.input(MovieRequest.Schema())
 @movie_bp.output(MovieResponse.Schema())
+@jwt_required()
+@movie_bp.auth_required(auth)
 def create_movie(json_data: MovieRequest):
     movie = MovieDao.create(**json_data.__dict__)
     return ResponseHandler.ok_response(movie)
 
+
 @movie_bp.delete("/<int:_id>")
 @movie_bp.output({})
+@jwt_required()
+@movie_bp.auth_required(auth)
 def delete_movie(_id: int):
     MovieDao.delete(_id)
-    return ResponseHandler.ok_response({},"删除成功")
-
+    return ResponseHandler.ok_response({}, "删除成功")

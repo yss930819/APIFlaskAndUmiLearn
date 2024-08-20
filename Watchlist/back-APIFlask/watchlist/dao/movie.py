@@ -24,6 +24,10 @@ class MovieDao:
         return BaseDao.get_all(Movie)
 
     @staticmethod
+    def update(_id: int, title: str, year: str) -> Movie:
+        return BaseDao.update(Movie, _id, title=title, year=year)
+
+    @staticmethod
     def delete(_id: int) -> None:
         BaseDao.delete(Movie, _id)
 

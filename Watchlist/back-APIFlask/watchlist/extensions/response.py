@@ -1,4 +1,5 @@
 import dataclasses
+from http import HTTPStatus
 
 import pydash
 from apiflask import APIFlask, abort
@@ -77,6 +78,10 @@ class ResponseHandler:
         self.app.extensions[self.NAME] = self
 
     @staticmethod
+    def response(code, message, data, status_code=HTTPStatus.OK):
+        return BaseResponse(code=code, message=message, data=data).__dict__, status_code
+
+    @staticmethod
     def error_processor(error):
         res = BaseResponse()
         res.code = -1
@@ -98,11 +103,7 @@ class ResponseHandler:
         :param message: 可添加成功消息，比如删除时提示删除成功。
         :return: 基于 BaseResponse 的数据
         """
-        res = BaseResponse()
-        res.code = 0
-        res.data = data
-        res.message = message
-        return res.__dict__
+        return ResponseHandler.response(0, message, data)
 
     @staticmethod
     def error_response(code: int, message: str, status_code: int = 400, detail=None):
