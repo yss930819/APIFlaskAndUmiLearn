@@ -1,5 +1,7 @@
 from dataclasses import field
+from http import HTTPStatus
 
+import pydash
 from apiflask import APIBlueprint
 from marshmallow_dataclass import dataclass
 
@@ -56,5 +58,8 @@ auth_bp = APIBlueprint("auth", __name__)
 )
 def login(json_data):
     token = AuthCtrl.login(**json_data.__dict__)
+    if pydash.is_none(token):
+        return ResponseHandler.error_response(-1000, "用户名或密码错误", HTTPStatus.UNAUTHORIZED)
+
     data = AuthResponse(access_token=token)
     return ResponseHandler.ok_response(data)

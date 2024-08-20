@@ -52,6 +52,13 @@ class MovieDaoTestCase(unittest.TestCase):
             movie = self.dao.get_by_id(4)
             self.assertIsNone(movie)
 
+    def test_update_movie(self):
+        with self.app.app_context():
+            movie =self.dao.update(1, 'My Movie', '2019')
+            self.assertEqual(movie.title, 'My Movie')
+            self.assertEqual(movie.year, '2019')
+
+
     def test_delete_movie(self):
         with self.app.app_context():
             self.dao.delete(1)
