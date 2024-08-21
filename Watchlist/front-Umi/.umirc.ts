@@ -24,6 +24,11 @@ export default defineConfig({
       path: '/login',
       component: './Login',
     },
+    {
+      name: '不存在',
+      path: '*',
+      component: './NotFound',
+    },
   ],
 
   npmClient: 'pnpm',

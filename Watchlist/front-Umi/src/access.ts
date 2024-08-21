@@ -6,5 +6,8 @@ export default function(initialState: InitialStateType) {
     hasLogin: () => {
       return initialState!.id !== -1;
     },
+    notLogin: () => {
+      return initialState!.id === -1;
+    },
   };
 }

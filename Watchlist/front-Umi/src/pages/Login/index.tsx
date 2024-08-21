@@ -7,13 +7,14 @@ import { useResponseError } from '@/utils/useResponseError';
 import { App } from 'antd';
 import { useModel } from '@@/plugin-model';
 import { history } from '@umijs/max';
+import { useAccessWrapper } from '@/utils/useAccessWrapper';
 
 interface FormData {
   username: string;
   password: string;
 }
 
-export default function Page() {
+function LoginPage() {
   const { showError } = useResponseError();
   const { setToken } = useModel('global', (model) => ({
     setToken: model.setToken,
@@ -85,3 +86,6 @@ export default function Page() {
   )
     ;
 }
+
+
+export default useAccessWrapper(LoginPage, 'notLogin');
