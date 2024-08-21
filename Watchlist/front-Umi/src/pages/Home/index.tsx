@@ -1,18 +1,25 @@
 import { App, Button, Flex, List, Spin, Typography } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRequest } from '@@/exports';
 import api from '@/services/watch-list';
+import lodash from 'lodash';
 
 const HomePage: React.FC = () => {
 
+  // Hooks 要在函数顶部
   const { data, error, loading } = useRequest(
     () => {
       return api.movie.getMovie();
     },
   );
+  const { message } = App.useApp();
+  let title = '0 title';
 
-
-
+  useEffect(() => {
+    if (error) {
+      message.error(`数据加载失败！${error.message}`);
+    }
+  }, [error]);
 
   if (loading) {
     return (
@@ -25,34 +32,34 @@ const HomePage: React.FC = () => {
     );
   }
 
-  const { message } = App.useApp();
   if (error) {
-    message.error(`数据加载失败！${error.message}`);
+    title = '数据加载失败';
+  }
+
+  if (data) {
+    title = data.length + ' title';
   }
 
   return (
-    <>
-      <Flex vertical>
-        <Typography.Text className={'tw-my-4 tw-text-sm'}>{data ? data.length : 0} Titles</Typography.Text>
-        <List
-          bordered
-          dataSource={data}
-          renderItem={
-            (item) => (
-              <List.Item>
-                <Flex className={'tw-w-full'} justify={'space-between'}>
-                  <Typography.Text>{item.title}-{item.year}</Typography.Text>
-                  <Button className={'tw-item-imdb-button'} href={'https://www.imdb.com/find/?q=' + item.title}
-                          size={'small'}><Typography.Text strong> IMDb </Typography.Text></Button>
-                </Flex>
+    <Flex vertical>
+      <Typography.Text className={'tw-my-4 tw-text-sm'}>{title}</Typography.Text>
+      <List
+        bordered
+        dataSource={data}
+        renderItem={
+          (item) => (
+            <List.Item>
+              <Flex className={'tw-w-full'} justify={'space-between'}>
+                <Typography.Text>{item.title}-{item.year}</Typography.Text>
+                <Button className={'tw-item-imdb-button'} href={'https://www.imdb.com/find/?q=' + item.title}
+                        size={'small'}><Typography.Text strong> IMDb </Typography.Text></Button>
+              </Flex>
 
-              </List.Item>
-            )}
-        >
-        </List>
-      </Flex>
-
-    </>
+            </List.Item>
+          )}
+      >
+      </List>
+    </Flex>
   );
 
 

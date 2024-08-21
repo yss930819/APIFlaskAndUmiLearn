@@ -39,6 +39,28 @@ export async function getMovieId(
   );
 }
 
+/** Update Movie PUT /api/v0/movie/${param0} */
+export async function putMovieId(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.putMovieIdParams,
+  body: API.MovieRequest,
+  options?: { [key: string]: any },
+) {
+  const { _id: param0, ...queryParams } = params;
+  return request<{ code?: number; data?: API.MovieResponse; message?: string }>(
+    `/api/v0/movie/${param0}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: { ...queryParams },
+      data: body,
+      ...(options || {}),
+    },
+  );
+}
+
 /** Delete Movie DELETE /api/v0/movie/${param0} */
 export async function deleteMovieId(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

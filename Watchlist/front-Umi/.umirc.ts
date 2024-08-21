@@ -19,6 +19,11 @@ export default defineConfig({
       path: '/home',
       component: './Home',
     },
+    {
+      name: '登录',
+      path: '/login',
+      component: './Login',
+    },
   ],
 
   npmClient: 'pnpm',
