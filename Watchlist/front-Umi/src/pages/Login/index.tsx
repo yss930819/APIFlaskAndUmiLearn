@@ -7,7 +7,7 @@ import { useResponseError } from '@/utils/useResponseError';
 import { App } from 'antd';
 import { useModel } from '@@/plugin-model';
 import { history } from '@umijs/max';
-import { useAccessWrapper } from '@/utils/useAccessWrapper';
+import { withAccessWrapper } from '@/utils/withAccessWrapper';
 
 interface FormData {
   username: string;
@@ -88,4 +88,4 @@ function LoginPage() {
 }
 
 
-export default useAccessWrapper(LoginPage, 'notLogin');
+export default withAccessWrapper(LoginPage, 'notLogin');
