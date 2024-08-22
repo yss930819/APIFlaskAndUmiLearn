@@ -25,6 +25,11 @@ export default defineConfig({
       component: './Login',
     },
     {
+      name: '用户信息',
+      path: '/user',
+      component: './User',
+    },
+    {
       name: '不存在',
       path: '*',
       component: './NotFound',

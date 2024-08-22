@@ -20,33 +20,49 @@ export default function() {
 
           <Flex className={'tw-bg-black'} justify={'space-between'}>
             <Flex justify={'flex-start'}>
-              <Button type={'link'} className={'tw-nav-link-button'}
-                      onClick={() => {
-                        history.push('/home');
-                      }}
-              >首页</Button>
+              <Button
+                type={'link'} className={'tw-nav-link-button'}
+                onClick={() => {
+                  history.push('/home');
+                }}
+              >
+                首页
+              </Button>
               <Access accessible={access.hasLogin()}>
                 <Button type={'link'} className={'tw-nav-link-button'}>管理</Button>
               </Access>
             </Flex>
             <Flex justify={'flex-end'}>
               <Access accessible={access.hasLogin()}>
-                <Button type={'link'} className={'tw-nav-link-button'}>{userInfo.name}</Button>
+                <Button
+                  type={'link'} className={'tw-nav-link-button'}
+                  onClick={() => {
+                    history.push('/user');
+                  }}>
+                  {userInfo.name}
+                </Button>
               </Access>
               <Access accessible={!access.hasLogin()}>
-                <Button type={'link'} className={'tw-nav-link-button'}
-                        onClick={() => {
-                          history.push('/login');
-                        }}
-                >登录</Button>
+                <Button
+                  type={'link'} className={'tw-nav-link-button'}
+                  onClick={() => {
+                    history.push('/login');
+                  }}
+                >
+                  登录
+                </Button>
               </Access>
 
               <Access accessible={access.hasLogin()}>
-                <Button type={'link'} className={'tw-nav-link-button'}
-                        onClick={() => {
-                          setToken();
-                        }}
-                >登出</Button>
+                <Button
+                  type={'link'} className={'tw-nav-link-button'}
+                  onClick={() => {
+                    setToken();
+                    history.push('/home');
+                  }}
+                >
+                  登出
+                </Button>
               </Access>
             </Flex>
           </Flex>
