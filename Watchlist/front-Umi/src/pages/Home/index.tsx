@@ -1,65 +1,102 @@
-import { App, Button, Flex, List, Spin, Typography } from 'antd';
-import React, { useEffect } from 'react';
-import { useRequest } from '@@/exports';
+import { Button, Typography } from 'antd';
+import React, { useRef } from 'react';
+import { Access, useAccess } from '@@/exports';
 import api from '@/services/watch-list';
-import lodash from 'lodash';
+import { useResponseError } from '@/utils/useResponseError';
+import { ActionType, ProCard, ProList } from '@ant-design/pro-components';
 
 const HomePage: React.FC = () => {
 
   // Hooks 要在函数顶部
-  const { data, error, loading } = useRequest(
-    () => {
-      return api.movie.getMovie();
-    },
-  );
-  const { message } = App.useApp();
-  let title = '0 title';
+  const { showError } = useResponseError();
+  const access = useAccess();
 
-  useEffect(() => {
-    if (error) {
-      message.error(`数据加载失败！${error.message}`);
-    }
-  }, [error]);
-
-  if (loading) {
-    return (
-      <Flex className={'tw-my-4 '} gap="middle" justify={'center'} vertical>
-        <Spin tip="正在加载中...">
-          <div className={'tw-h-64 tw-bg-gray-100'}></div>
-        </Spin>
-      </Flex>
-
-    );
-  }
-
-  if (error) {
-    title = '数据加载失败';
-  }
-
-  if (data) {
-    title = data.length + ' title';
-  }
+  const ref = useRef<ActionType>();
 
   return (
-    <Flex vertical>
-      <Typography.Text className={'tw-my-4 tw-text-sm'}>{title}</Typography.Text>
-      <List
-        bordered
-        dataSource={data}
-        renderItem={
-          (item) => (
-            <List.Item>
-              <Flex className={'tw-w-full'} justify={'space-between'}>
-                <Typography.Text>{item.title}-{item.year}</Typography.Text>
-                <Button className={'tw-item-imdb-button'} href={'https://www.imdb.com/find/?q=' + item.title}
-                        size={'small'}><Typography.Text strong> IMDb </Typography.Text></Button>
-              </Flex>
+    <ProCard bordered className={'tw-my-4'}>
+      <ProList<API.MovieResponse>
+        actionRef={ref}
+        toolBarRender={() => {
+          return [
+            <Access key={'new'} accessible={access.hasLogin()}>
+              <Button type={'primary'} size={'small'}>
+                新建
+              </Button>
+            </Access>,
 
-            </List.Item>
-          )}
+          ];
+        }}
+        rowKey="id"
+        headerTitle={<Typography.Title level={5}>清单列表</Typography.Title>}
+
+        request={async () => {
+          let data: API.MovieResponse[] = [];
+          let hasError = false;
+          // 读取数据
+          await api.movie.getMovie().then((res) => {
+            data = res.data!;
+          }).catch((error) => {
+            showError(error);
+            hasError = true;
+          });
+
+          return {
+            data,
+            success: !hasError,
+          };
+        }}
+
+        metas={
+          {
+            title: {
+              dataIndex: 'title',
+              render: (_, record) => {
+                return <Typography.Text>{record.title}</Typography.Text>;
+              },
+            },
+            subTitle: {
+              dataIndex: 'year',
+            },
+            actions: {
+              render: (_, record) => [
+                <Access key={'edit'} accessible={access.hasLogin()}>
+                  <Button size={'small'}>编辑</Button>
+                </Access>,
+                <Access key={'delete'} accessible={access.hasLogin()}>
+                  <Button
+                    size={'small'}
+                    onClick={async () => {
+                      await api.movie.deleteMovieId({ _id: record.id! }).then(
+                        () => {
+                          ref.current?.reload();
+                        },
+                      ).catch(
+                        (error) => {
+                          showError(error);
+                        });
+                    }}
+                  >
+                    删除
+                  </Button>
+                </Access>,
+                <Button
+                  key={'imdb'} className={'tw-item-imdb-button'}
+                  href={'https://www.imdb.com/find/?q=' + record.title}
+                  size={'small'}
+
+                >
+                  <Typography.Text strong> IMDb </Typography.Text>
+                </Button>,
+              ],
+            },
+          }
+        }
       >
-      </List>
-    </Flex>
+
+      </ProList>
+    </ProCard>
+
   );
 
 
